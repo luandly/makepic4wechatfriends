@@ -14,9 +14,9 @@ import com.example.expandtextview.R;
 import com.example.expandtextview.app.App;
 
 /**
- * @author yiw
- * @Description:
- * @date 16/1/2 16:54
+ * @作者: njb
+ * @时间: 2019/7/22 10:53
+ * @描述:
  */
 public class CircleMovementMethod extends BaseMovementMethod {
     public final String TAG = CircleMovementMethod.class.getSimpleName();

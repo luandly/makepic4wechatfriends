@@ -15,12 +15,12 @@ import com.example.expandtextview.spannable.CircleMovementMethod;
 /**
  * @作者: njb
  * @时间: 2019/7/22 10:53
- * @描述: 自定义仿微信朋友圈显示全文与收起
+ * @描述: 自定义仿微信朋友圈显示全文与收起的TextView
  */
 public class ExpandTextView extends LinearLayout {
     public static final int DEFAULT_MAX_LINES = 3;//最大的行数
     private TextView contentText;
-    private TextView textPlus;
+    private TextView textState;
 
     private int showLines;
 
@@ -52,18 +52,18 @@ public class ExpandTextView extends LinearLayout {
             contentText.setMaxLines(showLines);
         }
 
-        textPlus = (TextView) findViewById(R.id.textPlus);
-        textPlus.setOnClickListener(new OnClickListener() {
+        textState = (TextView) findViewById(R.id.textState);
+        textState.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                String textStr = textPlus.getText().toString().trim();
+                String textStr = textState.getText().toString().trim();
                 if("全文".equals(textStr)){
                     contentText.setMaxLines(Integer.MAX_VALUE);
-                    textPlus.setText("收起");
+                    textState.setText("收起");
                     setExpand(true);
                 }else{
                     contentText.setMaxLines(showLines);
-                    textPlus.setText("全文");
+                    textState.setText("全文");
                     setExpand(false);
                 }
                 //通知外部状态已变更
@@ -96,18 +96,15 @@ public class ExpandTextView extends LinearLayout {
 
                     if(isExpand){
                         contentText.setMaxLines(Integer.MAX_VALUE);
-                        textPlus.setText("收起");
+                        textState.setText("收起");
                     }else{
                         contentText.setMaxLines(showLines);
-                        textPlus.setText("全文");
+                        textState.setText("全文");
                     }
-                    textPlus.setVisibility(View.VISIBLE);
+                    textState.setVisibility(View.VISIBLE);
                 }else{
-                    textPlus.setVisibility(View.GONE);
+                    textState.setVisibility(View.GONE);
                 }
-
-                //Log.d("onPreDraw", "onPreDraw...");
-                //Log.d("onPreDraw", linCount + "");
                 return true;
             }
 
