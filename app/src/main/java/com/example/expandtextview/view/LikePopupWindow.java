@@ -2,6 +2,7 @@ package com.example.expandtextview.view;
 
 import android.content.Context;
 import android.graphics.drawable.ColorDrawable;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -74,6 +75,8 @@ public class LikePopupWindow extends PopupWindow implements View.OnClickListener
         int xOffset = location[0] - mPopupWindowWidth - Utils.dp2px(10f);
         int yOffset = location[1] + (anchor.getHeight() - mPopupWindowHeight) / 2;
         showAtLocation(anchor, Gravity.NO_GRAVITY, xOffset, yOffset);
+        //showAsDropDown(anchor,0,0);
+        Log.e("location", xOffset + " -------------------" + yOffset);
     }
 
     @Override

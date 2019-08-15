@@ -17,7 +17,7 @@ import java.util.List;
 /**
  * @作者: njb
  * @时间: 2019/7/25 10:47
- * @描述:
+ * @描述: 朋友圈适配器
  */
 public class CircleAdapter extends RecyclerView.Adapter<CircleAdapter.CircleViewHolder>{
     private Context context;
@@ -64,16 +64,17 @@ public class CircleAdapter extends RecyclerView.Adapter<CircleAdapter.CircleView
     public class CircleViewHolder extends RecyclerView.ViewHolder {
         ExpandTextView expandTextView;
         ImageView ivComment;
+        ImageView ivPhoto;
         public CircleViewHolder(@NonNull View itemView) {
             super(itemView);
             expandTextView = itemView.findViewById(R.id.expand_textView);
             ivComment = itemView.findViewById(R.id.iv_edit);
+            ivPhoto = itemView.findViewById(R.id.iv_photo);
         }
     }
 
+    //点击事件接口回调
     public interface MyClickListener{
         void onClick(int position,View v);
     }
-
-
 }
