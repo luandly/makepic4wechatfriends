@@ -6,9 +6,12 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
+import android.view.View;
 
 import com.example.expandtextview.adapter.CircleAdapter;
 import com.example.expandtextview.view.ExpandTextView;
+import com.example.expandtextview.view.LikePopupWindow;
+import com.example.expandtextview.view.OnPraiseOrCommentClickListener;
 import com.example.expandtextview.view.SpaceDecoration;
 
 import java.util.ArrayList;
@@ -19,7 +22,7 @@ import java.util.List;
  * @时间: 2019/7/22 10:53
  * @描述: 仿微信朋友圈文本显示全文与收起
  */
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements CircleAdapter.MyClickListener {
     private RecyclerView recyclerView;
     private CircleAdapter circleAdapter;
     private String content = "茫茫的长白大山，浩瀚的原始森林，大山脚下，原始森林环抱中散落着几十户人家的" +
@@ -28,6 +31,7 @@ public class MainActivity extends AppCompatActivity {
             "树，抬树，要么砍柳树毛子开荒种地。在山里，可听那吆呵声：“顺山倒了！”放树谨防回头棒！" +
             "树上的枯枝打到别的树上再蹦回来，这回头棒打人最厉害。";
     private List<String> strings;
+    private LikePopupWindow likePopupWindow;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +40,11 @@ public class MainActivity extends AppCompatActivity {
         initViews();
         initData();
         initAdapter();
+        setListener();
+    }
+
+    private void setListener() {
+
     }
 
     /**
@@ -59,9 +68,45 @@ public class MainActivity extends AppCompatActivity {
      * 设置adapter
      */
     private void initAdapter() {
-        circleAdapter = new CircleAdapter(this, strings);
+        circleAdapter = new CircleAdapter(this, strings,this);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.addItemDecoration(new SpaceDecoration(this));
         recyclerView.setAdapter(circleAdapter);
+
+    }
+
+    @Override
+    public void onClick(int position,View v) {
+        if (likePopupWindow == null) {
+            likePopupWindow = new LikePopupWindow(this, 0);
+        }
+        likePopupWindow.setOnPraiseOrCommentClickListener(new OnPraiseOrCommentClickListener() {
+            @Override
+            public void onPraiseClick(int position) {
+
+                likePopupWindow.dismiss();
+            }
+
+            @Override
+            public void onCommentClick(int position) {
+
+                likePopupWindow.dismiss();
+            }
+
+            @Override
+            public void onClickFrendCircleTopBg() {
+
+            }
+
+            @Override
+            public void onDeleteItem(String id, int position) {
+
+            }
+        }).setTextView(0).setCurrentPosition(position);
+        if (likePopupWindow.isShowing()) {
+            likePopupWindow.dismiss();
+        } else {
+            likePopupWindow.showPopupWindow(v);
+        }
     }
 }

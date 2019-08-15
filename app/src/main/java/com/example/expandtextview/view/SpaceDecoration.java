@@ -1,14 +1,11 @@
 package com.example.expandtextview.view;
 
 import android.content.Context;
-import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
-import android.graphics.drawable.Drawable;
 import android.view.View;
 
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.expandtextview.R;
@@ -16,7 +13,7 @@ import com.example.expandtextview.R;
 /**
  * @作者: njb
  * @时间: 2019/7/25 11:31
- * @描述:
+ * @描述: 自定义分割线
  */
 public class SpaceDecoration extends RecyclerView.ItemDecoration {
     private Context mContext;   //上下文

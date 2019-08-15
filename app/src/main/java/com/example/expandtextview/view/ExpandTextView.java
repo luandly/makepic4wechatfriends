@@ -111,7 +111,6 @@ public class ExpandTextView extends LinearLayout {
 
         });
         contentText.setText(content);
-        contentText.setMovementMethod(new CircleMovementMethod(getResources().getColor(R.color.name_selector_color)));
     }
 
     public void setExpand(boolean isExpand){
