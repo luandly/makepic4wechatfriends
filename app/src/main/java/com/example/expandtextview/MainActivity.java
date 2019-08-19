@@ -5,10 +5,21 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import android.graphics.Rect;
 import android.os.Bundle;
+import android.text.TextUtils;
+import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewTreeObserver;
+import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.expandtextview.adapter.CircleAdapter;
+import com.example.expandtextview.util.CommonUtils;
+import com.example.expandtextview.util.Utils;
 import com.example.expandtextview.view.LikePopupWindow;
 import com.example.expandtextview.view.OnPraiseOrCommentClickListener;
 import com.example.expandtextview.view.SpaceDecoration;
@@ -21,7 +32,7 @@ import java.util.List;
      * @时间: 2019/7/22 10:53
      * @描述: 仿微信朋友圈文本显示全文与收起
      */
-    public class MainActivity extends AppCompatActivity implements CircleAdapter.MyClickListener{
+    public class MainActivity extends AppCompatActivity implements CircleAdapter.MyClickListener, View.OnClickListener {
         private RecyclerView recyclerView;
         private CircleAdapter circleAdapter;
         private String content = "茫茫的长白大山，浩瀚的原始森林，大山脚下，原始森林环抱中散落着几十户人家的" +
@@ -32,6 +43,16 @@ import java.util.List;
         private List<String> strings;
         private LikePopupWindow likePopupWindow;
         private int page = 1;
+        private EditText etComment;
+        private LinearLayout llComment;
+        private TextView tvSend;
+        private LinearLayout llScroll;
+        private int screenHeight;
+        private int editTextBodyHeight;
+        private int currentKeyboardH;
+        private int selectCommentItemOffset;
+        private int commentPosition;
+        protected final String TAG = this.getClass().getSimpleName();
 
         @Override
         protected void onCreate(Bundle savedInstanceState) {
@@ -44,14 +65,49 @@ import java.util.List;
         }
 
         private void setListener() {
-
+            tvSend.setOnClickListener(this);
         }
 
+
+        private void setViewTreeObserver() {
+            final ViewTreeObserver swipeRefreshLayoutVTO = llScroll.getViewTreeObserver();
+            swipeRefreshLayoutVTO.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                @Override
+                public void onGlobalLayout() {
+                    Rect r = new Rect();
+                    llScroll.getWindowVisibleDisplayFrame(r);
+                    int statusBarH = Utils.getStatusBarHeight();//状态栏高度
+                    int screenH = llScroll.getRootView().getHeight();
+                    if (r.top != statusBarH) {
+                        //在这个demo中r.top代表的是状态栏高度，在沉浸式状态栏时r.top＝0，通过getStatusBarHeight获取状态栏高度
+                        r.top = statusBarH;
+                    }
+                    int keyboardH = screenH - (r.bottom - r.top);
+                    Log.d(TAG, "screenH＝ " + screenH + " &keyboardH = " + keyboardH + " &r.bottom=" + r.bottom + " &top=" + r.top + " &statusBarH=" + statusBarH);
+
+                    if (keyboardH == currentKeyboardH) {//有变化时才处理，否则会陷入死循环
+                        return;
+                    }
+                    currentKeyboardH = keyboardH;
+                    screenHeight = screenH;//应用屏幕的高度
+                    editTextBodyHeight = llComment.getHeight();
+                    if (keyboardH < 150) {//说明是隐藏键盘的情况
+                        MainActivity.this.updateEditTextBodyVisible(View.GONE);
+                        return;
+                    }
+                    //偏移listview
+                }
+            });
+        }
         /**
          * 初始化控件
          */
         private void initViews() {
             recyclerView = findViewById(R.id.recyclerView);
+            llComment = findViewById(R.id.ll_comment);
+            etComment = findViewById(R.id.et_comment);
+            tvSend = findViewById(R.id.tv_send_comment);
+            llScroll = findViewById(R.id.ll_scroll);
         }
 
         /**
@@ -73,7 +129,16 @@ import java.util.List;
             recyclerView.setLayoutManager(new LinearLayoutManager(this));
             recyclerView.addItemDecoration(new SpaceDecoration(this));
             recyclerView.setAdapter(circleAdapter);
-
+            recyclerView.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View view, MotionEvent motionEvent) {
+                    if (llComment.getVisibility() == View.VISIBLE) {
+                        updateEditTextBodyVisible(View.GONE);
+                        return true;
+                    }
+                    return false;
+                }
+            });
         }
 
         @Override
@@ -84,14 +149,17 @@ import java.util.List;
             likePopupWindow.setOnPraiseOrCommentClickListener(new OnPraiseOrCommentClickListener() {
                 @Override
                 public void onPraiseClick(int position) {
-
+                    Toast.makeText(MainActivity.this,"点赞成功",Toast.LENGTH_SHORT).show();
                     likePopupWindow.dismiss();
                 }
 
                 @Override
                 public void onCommentClick(int position) {
-
+                    llComment.setVisibility(View.VISIBLE);
+                    etComment.requestFocus();
+                    CommonUtils.showSoftInput(MainActivity.this,llComment);
                     likePopupWindow.dismiss();
+
                 }
 
                 @Override
@@ -111,4 +179,31 @@ import java.util.List;
             }
         }
 
+        public void updateEditTextBodyVisible(int visibility) {
+            llComment.setVisibility(visibility);
+            if (View.VISIBLE == visibility) {
+                llComment.requestFocus();
+                //弹出键盘
+                CommonUtils.showSoftInput(etComment.getContext(), etComment);
+
+            } else if (View.GONE == visibility) {
+                //隐藏键盘
+                CommonUtils.hideSoftInput(etComment.getContext(), etComment);
+            }
+        }
+
+
+        @Override
+        public void onClick(View view) {
+            switch (view.getId()){
+                case R.id.tv_send_comment:
+                    if (TextUtils.isEmpty(etComment.getText().toString())) {
+                        Toast.makeText(MainActivity.this,"请输入评论内容",Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    setViewTreeObserver();
+                    break;
+            }
+
+        }
     }
