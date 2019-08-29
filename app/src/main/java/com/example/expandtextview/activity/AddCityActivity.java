@@ -8,7 +8,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.expandtextview.R;
-import com.example.expandtextview.entity.CityEvent;
+import com.example.expandtextview.entity.WeatherEvent;
 import com.example.expandtextview.util.RxBus;
 
 /**
@@ -31,7 +31,7 @@ public class AddCityActivity extends AppCompatActivity {
         textView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                RxBus.getInstance().post(new CityEvent("001","北京市"));
+                RxBus.getInstance().post(new WeatherEvent("021","西安市","30℃"));
                 finish();
             }
         });

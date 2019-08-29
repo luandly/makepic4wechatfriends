@@ -19,7 +19,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.expandtextview.activity.AddCityActivity;
 import com.example.expandtextview.adapter.CircleAdapter;
-import com.example.expandtextview.entity.CityEvent;
+import com.example.expandtextview.entity.WeatherEvent;
 import com.example.expandtextview.util.CommonUtils;
 import com.example.expandtextview.util.RxBus;
 import com.example.expandtextview.util.Utils;
@@ -62,7 +62,6 @@ public class MainActivity extends AppCompatActivity implements CircleAdapter.MyC
     private int selectCommentItemOffset;
     private int commentPosition;
     protected final String TAG = this.getClass().getSimpleName();
-    Subscription subscription;
     CompositeDisposable compositeDisposable;
     private TextView tvCity;
 
@@ -79,18 +78,17 @@ public class MainActivity extends AppCompatActivity implements CircleAdapter.MyC
 
     private void initRxBus() {
         compositeDisposable = new CompositeDisposable();
-
-        RxBus.getInstance().toObservable(CityEvent.class)
-                .subscribe(new Observer<CityEvent>() {
+        RxBus.getInstance().toObservable(WeatherEvent.class)
+                .subscribe(new Observer<WeatherEvent>() {
                     @Override
                     public void onSubscribe(Disposable d) {
                         compositeDisposable.add(d);
                     }
 
                     @Override
-                    public void onNext(CityEvent cityEvent) {
-                        Log.e("userBean", cityEvent.getCityName());
-                        tvCity.setText(cityEvent.getCityName());
+                    public void onNext(WeatherEvent weatherEvent) {
+                        Log.e("weather", weatherEvent.getTemperature()+"-**-"+weatherEvent.getCityName());
+                        tvCity.setText(String.format("%s %s", weatherEvent.getCityName(),weatherEvent.getTemperature()));
                     }
 
                     @Override
@@ -259,8 +257,7 @@ public class MainActivity extends AppCompatActivity implements CircleAdapter.MyC
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (subscription != null) {
-            subscription.cancel();
-        }
+        //取消订阅
+        RxBus.rxBusUnbund(compositeDisposable);
     }
 }
