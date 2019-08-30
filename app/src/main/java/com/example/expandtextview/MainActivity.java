@@ -27,8 +27,6 @@ import com.example.expandtextview.view.LikePopupWindow;
 import com.example.expandtextview.view.OnPraiseOrCommentClickListener;
 import com.example.expandtextview.view.SpaceDecoration;
 
-import org.reactivestreams.Subscription;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -134,7 +132,6 @@ public class MainActivity extends AppCompatActivity implements CircleAdapter.MyC
                     MainActivity.this.updateEditTextBodyVisible(View.GONE);
                     return;
                 }
-                //偏移listview
             }
         });
     }
@@ -153,7 +150,6 @@ public class MainActivity extends AppCompatActivity implements CircleAdapter.MyC
 
     /**
      * 初始化数据
-     *
      * @param
      */
     private void initData() {
@@ -246,12 +242,10 @@ public class MainActivity extends AppCompatActivity implements CircleAdapter.MyC
                     return;
                 }
                 setViewTreeObserver();
-
                 break;
             default:
                 break;
         }
-
     }
 
     @Override

@@ -14,7 +14,7 @@
         android:id="@+id/tv_city"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="城市名称"
+        tools:text="城市名称"
         android:layout_gravity="center"
         android:layout_margin="5dp"
         android:gravity="center"/>
