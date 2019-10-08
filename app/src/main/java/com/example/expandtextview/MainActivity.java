@@ -1,9 +1,10 @@
 package com.example.expandtextview;
 
-import android.content.Intent;
 import android.graphics.Rect;
 import android.os.Bundle;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -17,7 +18,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.expandtextview.activity.AddCityActivity;
 import com.example.expandtextview.adapter.CircleAdapter;
 import com.example.expandtextview.entity.WeatherEvent;
 import com.example.expandtextview.util.CommonUtils;
@@ -146,6 +146,25 @@ public class MainActivity extends AppCompatActivity implements CircleAdapter.MyC
         tvSend = findViewById(R.id.tv_send_comment);
         llScroll = findViewById(R.id.ll_scroll);
         tvCity = findViewById(R.id.tv_city);
+
+        etComment.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                if (etComment.getText().length() == 500) {
+                    Toast.makeText(MainActivity.this,getResources().getString(R.string.the_content_of_the_comment_cannot_exceed_500_words),Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
     }
 
     /**
@@ -180,7 +199,8 @@ public class MainActivity extends AppCompatActivity implements CircleAdapter.MyC
     }
 
     @Override
-    public void onClick(int position, View v) {
+    public void onClick(int position, final View v) {
+        final int itemBottomY = getCoordinateY(v) + v.getHeight();//item 底部y坐标
         if (likePopupWindow == null) {
             likePopupWindow = new LikePopupWindow(this, 0);
         }
@@ -189,8 +209,6 @@ public class MainActivity extends AppCompatActivity implements CircleAdapter.MyC
             public void onPraiseClick(int position) {
                 Toast.makeText(MainActivity.this, "点赞成功", Toast.LENGTH_SHORT).show();
                 likePopupWindow.dismiss();
-                Intent intent = new Intent(MainActivity.this, AddCityActivity.class);
-                startActivity(intent);
             }
 
             @Override
@@ -199,6 +217,15 @@ public class MainActivity extends AppCompatActivity implements CircleAdapter.MyC
                 etComment.requestFocus();
                 CommonUtils.showSoftInput(MainActivity.this, llComment);
                 likePopupWindow.dismiss();
+                etComment.setHint("说点什么");
+                etComment.setText("");
+
+
+                v.postDelayed(() -> {
+                    int y = getCoordinateY(llComment);
+                    //评论时滑动到对应item底部和输入框顶部对齐
+                    recyclerView.smoothScrollBy(0, itemBottomY - y);
+                }, 300);
 
             }
 
@@ -230,6 +257,19 @@ public class MainActivity extends AppCompatActivity implements CircleAdapter.MyC
             //隐藏键盘
             CommonUtils.hideSoftInput(etComment.getContext(), etComment);
         }
+    }
+
+
+    /**
+     * 获取控件左上顶点Y坐标
+     *
+     * @param view
+     * @return
+     */
+    private int getCoordinateY(View view) {
+        int[] coordinate = new int[2];
+        view.getLocationOnScreen(coordinate);
+        return coordinate[1];
     }
 
 

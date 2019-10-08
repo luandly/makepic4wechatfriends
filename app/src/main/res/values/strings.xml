@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">ExpandTextView</string>
+    <string name="the_content_of_the_comment_cannot_exceed_500_words">评论内容不能超过500字...</string>
 </resources>
