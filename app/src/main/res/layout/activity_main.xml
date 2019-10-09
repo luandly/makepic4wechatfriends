@@ -17,7 +17,8 @@
         tools:text="城市名称"
         android:layout_gravity="center"
         android:layout_margin="5dp"
-        android:gravity="center"/>
+        android:gravity="center"
+        android:visibility="gone"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"

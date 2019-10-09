@@ -25,6 +25,7 @@ import com.example.expandtextview.util.RxBus;
 import com.example.expandtextview.util.Utils;
 import com.example.expandtextview.view.LikePopupWindow;
 import com.example.expandtextview.view.OnPraiseOrCommentClickListener;
+import com.example.expandtextview.view.ScrollSpeedLinearLayoutManger;
 import com.example.expandtextview.view.SpaceDecoration;
 
 import java.util.ArrayList;
@@ -62,6 +63,7 @@ public class MainActivity extends AppCompatActivity implements CircleAdapter.MyC
     protected final String TAG = this.getClass().getSimpleName();
     CompositeDisposable compositeDisposable;
     private TextView tvCity;
+    private ScrollSpeedLinearLayoutManger layoutManger;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -183,7 +185,9 @@ public class MainActivity extends AppCompatActivity implements CircleAdapter.MyC
      */
     private void initAdapter() {
         circleAdapter = new CircleAdapter(this, strings, this);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        layoutManger = new ScrollSpeedLinearLayoutManger(this);
+        recyclerView.setLayoutManager(layoutManger);
+        layoutManger.setSpeedSlow();
         recyclerView.addItemDecoration(new SpaceDecoration(this));
         recyclerView.setAdapter(circleAdapter);
         recyclerView.setOnTouchListener(new View.OnTouchListener() {
@@ -224,7 +228,7 @@ public class MainActivity extends AppCompatActivity implements CircleAdapter.MyC
                 v.postDelayed(() -> {
                     int y = getCoordinateY(llComment);
                     //评论时滑动到对应item底部和输入框顶部对齐
-                    recyclerView.smoothScrollBy(0, itemBottomY - y);
+                    recyclerView.smoothScrollBy(0,itemBottomY-y);
                 }, 300);
 
             }
