@@ -1,5 +1,6 @@
 package com.example.expandtextview;
 
+import android.content.Intent;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.text.Editable;
@@ -11,6 +12,7 @@ import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -18,6 +20,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.expandtextview.activity.AddCityActivity;
+import com.example.expandtextview.activity.SpinnerActivity;
 import com.example.expandtextview.adapter.CircleAdapter;
 import com.example.expandtextview.entity.WeatherEvent;
 import com.example.expandtextview.util.CommonUtils;
@@ -30,6 +34,7 @@ import com.example.expandtextview.view.SpaceDecoration;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import io.reactivex.Observer;
 import io.reactivex.disposables.CompositeDisposable;
@@ -48,6 +53,8 @@ public class MainActivity extends AppCompatActivity implements CircleAdapter.MyC
             "窗前有一道小溪流过。学子在这里吃饭，由这里出发每天随社员去地里干活。干的活要么上山伐" +
             "树，抬树，要么砍柳树毛子开荒种地。在山里，可听那吆呵声：“顺山倒了！”放树谨防回头棒！" +
             "树上的枯枝打到别的树上再蹦回来，这回头棒打人最厉害。";
+
+
     private List<String> strings;
     private LikePopupWindow likePopupWindow;
     private int page = 1;
@@ -213,6 +220,8 @@ public class MainActivity extends AppCompatActivity implements CircleAdapter.MyC
             public void onPraiseClick(int position) {
                 Toast.makeText(MainActivity.this, "点赞成功", Toast.LENGTH_SHORT).show();
                 likePopupWindow.dismiss();
+               // startActivity(new Intent(MainActivity.this, AddCityActivity.class));
+                startActivity(new Intent(MainActivity.this, SpinnerActivity.class));
             }
 
             @Override
