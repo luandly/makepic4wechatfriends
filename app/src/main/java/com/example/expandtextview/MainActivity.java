@@ -1,17 +1,21 @@
 package com.example.expandtextview;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.EditText;
@@ -43,6 +47,7 @@ import com.example.expandtextview.util.RxBus;
 import com.example.expandtextview.util.StorageUtil;
 import com.example.expandtextview.util.ToastUtils;
 import com.example.expandtextview.util.Utils;
+import com.example.expandtextview.view.CustomerPopupWindow;
 import com.example.expandtextview.view.LikePopupWindow;
 import com.example.expandtextview.view.OnPraiseOrCommentClickListener;
 import com.example.expandtextview.view.ScrollSpeedLinearLayoutManger;
@@ -50,6 +55,7 @@ import com.example.expandtextview.view.SpaceDecoration;
 import com.github.ielse.imagewatcher.ImageWatcher;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -91,6 +97,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private String userId;
     private String userName;
     private Uri url;
+    private CustomerPopupWindow pw;
+    private View mView;
+    private RxPermissions rxPermissions;
+    private static MyHandler myHandler;
+    private static String dstPath;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -280,6 +291,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         imageWatcher.setOnPictureLongPressListener(this);
         imageWatcher.setLoader(this);
         getPermissions();
+        myHandler = new MyHandler(this);
     }
 
     /**
@@ -374,6 +386,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onDestroy();
         //取消订阅
         RxBus.rxBusUnbund(compositeDisposable);
+        myHandler.removeCallbacksAndMessages(null);
     }
 
     @Override
@@ -396,27 +409,63 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         alert.setMessage("你确定要保存图片吗?");
         alert.setNegativeButton("取消", null);
         alert.setPositiveButton("确定", (dialog, which) -> {
-            url = uri;
-            savePhoto(url);
+            rxPermissions
+                    .request(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                    .subscribe(granted -> {
+                        if (granted) {
+                            if (uri != null) {// Always true pre-M
+                                savePhoto(uri);
+                            }
+                        } else {
+                            ToastUtils.ToastShort("缺少必要权限,请授予权限");
+                        }
+                    });
             dialog.dismiss();
 
         });
         alert.show();
     }
 
-    private void getPermissions() {
-        final RxPermissions rxPermissions = new RxPermissions(this);
-        rxPermissions
-                .request(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                .subscribe(granted -> {
-                    if (granted) {
-                        if (url != null) {// Always true pre-M
-                            savePhoto(url);
+    private class MyHandler extends Handler {
+        private WeakReference<Activity> mActivity;
+        private Bitmap bitmap;
+
+        private MyHandler(Activity activity) {
+            mActivity = new WeakReference<>(activity);
+        }
+
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            final Activity activity = mActivity.get();
+            if (activity != null) {
+                if (msg.what == 1) {
+                    try {
+                        bitmap = (Bitmap) msg.obj;
+                        if (Utils.saveBitmap(bitmap, dstPath, false)) {
+                            try {
+                                ContentValues values = new ContentValues(2);
+                                values.put(MediaStore.Images.Media.MIME_TYPE, Constants.MIME_JPEG);
+                                values.put(MediaStore.Images.Media.DATA, dstPath);
+                                getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
+                                ToastUtils.ToastShort(activity, getResources().getString(R.string.picture_save_to));
+                            } catch (Exception e) {
+                                ToastUtils.ToastShort(activity, getResources().getString(R.string.picture_save_fail));
+                            }
+                        } else {
+                            ToastUtils.ToastShort(activity, getResources().getString(R.string.picture_save_fail));
                         }
-                    } else {
-                        ToastUtils.ToastShort("缺少必要权限");
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        ToastUtils.ToastShort(activity, getResources().getString(R.string.picture_save_fail));
                     }
-                });
+                }
+            }
+        }
+    }
+
+    private void getPermissions() {
+        rxPermissions = new RxPermissions(this);
     }
 
     private void savePhoto(Uri uri) {
@@ -424,25 +473,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
                 String picPath = StorageUtil.getSystemImagePath();
-                String dstPath = picPath + (System.currentTimeMillis() / 1000) + ".jpeg";
-                try {
-                    if (Utils.saveBitmap(resource, dstPath, false)) {
-                        try {
-                            ContentValues values = new ContentValues(2);
-                            values.put(MediaStore.Images.Media.MIME_TYPE, Constants.MIME_JPEG);
-                            values.put(MediaStore.Images.Media.DATA, dstPath);
-                            getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
-                            ToastUtils.ToastShort(MainActivity.this, getString(R.string.picture_save_to));
-                        } catch (Exception e) {
-                            ToastUtils.ToastShort(MainActivity.this, getString(R.string.picture_save_fail));
-                        }
-                    } else {
-                        ToastUtils.ToastShort(MainActivity.this, getString(R.string.picture_save_fail));
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    ToastUtils.ToastShort(MainActivity.this, getString(R.string.picture_save_fail));
-                }
+                dstPath = picPath + (System.currentTimeMillis() / 1000) + ".jpeg";
+                Message message = Message.obtain();
+                message.what = 1;
+                message.obj = resource;
+                myHandler.sendMessage(message);
                 return false;
             }
 
@@ -452,4 +487,5 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         }).submit();
     }
+
 }
