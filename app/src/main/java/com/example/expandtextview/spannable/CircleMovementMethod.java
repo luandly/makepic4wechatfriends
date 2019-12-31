@@ -64,6 +64,7 @@ public class CircleMovementMethod extends BaseMovementMethod {
         this.clickableSpanBgClor = clickableSpanBgClor;
     }
 
+    @Override
     public boolean onTouchEvent(TextView widget, Spannable buffer,
                                 MotionEvent event) {
 

@@ -1,4 +1,4 @@
-package com.example.expandtextview.entity;
+package com.example.expandtextview.bean;
 
 /**
  * @作者: njb

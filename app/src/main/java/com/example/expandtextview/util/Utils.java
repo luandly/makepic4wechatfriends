@@ -2,11 +2,18 @@ package com.example.expandtextview.util;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.text.TextUtils;
 import android.util.TypedValue;
 
 import androidx.annotation.NonNull;
 
 import com.example.expandtextview.app.App;
+
+import java.io.BufferedOutputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 
 /**
  * @作者: njb
@@ -57,5 +64,45 @@ public class Utils {
             result =App.getContext().getResources().getDimensionPixelSize(resourceId);
         }
         return result;
+    }
+
+    public static int calcStatusBarHeight(Context context) {
+        int statusHeight = -1;
+        try {
+            Class<?> clazz = Class.forName("com.android.internal.R$dimen");
+            Object object = clazz.newInstance();
+            int height = Integer.parseInt(clazz.getField("status_bar_height").get(object).toString());
+            statusHeight = context.getResources().getDimensionPixelSize(height);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return statusHeight;
+    }
+
+    public static boolean saveBitmap(Bitmap bitmap, String path, boolean recycle) {
+        if (bitmap == null || TextUtils.isEmpty(path)) {
+            return false;
+        }
+
+        BufferedOutputStream bos = null;
+        try {
+            FileOutputStream fos = new FileOutputStream(path);
+            bos = new BufferedOutputStream(fos);
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 80, bos);
+            return true;
+
+        } catch (FileNotFoundException e) {
+            return false;
+        } finally {
+            if (bos != null) {
+                try {
+                    bos.close();
+                } catch (IOException e) {
+                }
+            }
+            if (recycle) {
+                bitmap.recycle();
+            }
+        }
     }
 }

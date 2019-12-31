@@ -9,7 +9,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.expandtextview.R;
-import com.example.expandtextview.entity.WeatherEvent;
+import com.example.expandtextview.bean.WeatherEvent;
 import com.example.expandtextview.util.RxBus;
 import com.zzhoujay.richtext.RichText;
 
