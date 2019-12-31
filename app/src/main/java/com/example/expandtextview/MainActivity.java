@@ -1,6 +1,7 @@
 package com.example.expandtextview;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Context;
@@ -46,7 +47,6 @@ import com.example.expandtextview.util.RxBus;
 import com.example.expandtextview.util.StorageUtil;
 import com.example.expandtextview.util.ToastUtils;
 import com.example.expandtextview.util.Utils;
-import com.example.expandtextview.view.CustomerPopupWindow;
 import com.example.expandtextview.view.LikePopupWindow;
 import com.example.expandtextview.view.OnPraiseOrCommentClickListener;
 import com.example.expandtextview.view.ScrollSpeedLinearLayoutManger;
@@ -66,7 +66,7 @@ import io.reactivex.disposables.Disposable;
 /**
  * @作者: njb
  * @时间: 2019/7/22 10:53
- * @描述: 仿微信朋友圈文本显示全文与收起
+ * @描述: 仿微信朋友圈实现
  */
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, CircleAdapter.Click, ImageWatcher.OnPictureLongPressListener, ImageWatcher.Loader {
     private RecyclerView recyclerView;
@@ -77,7 +77,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private LinearLayout llComment;
     private TextView tvSend;
     private LinearLayout llScroll;
-    private int screenHeight;
     private int editTextBodyHeight;
     private int currentKeyboardH;
     private int selectCommentItemOffset;
@@ -167,6 +166,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         circleAdapter.setOnItemChildClickListener((adapter, view, position) -> {
             userId = Objects.requireNonNull(circleAdapter.getItem(position)).getId();
             userName = Objects.requireNonNull(circleAdapter.getItem(position)).getUser_name();
+            isLike = Objects.requireNonNull(circleAdapter.getItem(position)).getIs_like();
             comPosition = position;
             switch (view.getId()) {
                 case R.id.iv_edit:
@@ -262,7 +262,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 return;
             }
             currentKeyboardH = keyboardH;
-            screenHeight = screenH;//应用屏幕的高度
             editTextBodyHeight = llComment.getHeight();
             if (keyboardH < 150) {//说明是隐藏键盘的情况
                 MainActivity.this.updateEditTextBodyVisible(View.GONE);
@@ -282,6 +281,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         llScroll = findViewById(R.id.ll_scroll);
         tvCity = findViewById(R.id.tv_city);
         imageWatcher = findViewById(R.id.imageWatcher);
+        //初始化仿微信图片滑动加载器
         imageWatcher.setTranslucentStatus(Utils.calcStatusBarHeight(this));
         imageWatcher.setErrorImageRes(R.mipmap.error_picture);
         imageWatcher.setOnPictureLongPressListener(this);
@@ -422,6 +422,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         alert.show();
     }
 
+    @SuppressLint("HandlerLeak")
     private class MyHandler extends Handler {
         private WeakReference<Activity> mActivity;
         private Bitmap bitmap;
@@ -464,6 +465,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         rxPermissions = new RxPermissions(this);
     }
 
+    /**
+     * 长按保存图片
+     * @param uri 图片url地址
+     */
     private void savePhoto(Uri uri) {
         Glide.with(MainActivity.this).asBitmap().load(uri).listener(new RequestListener<Bitmap>() {
             @Override

@@ -67,8 +67,6 @@ public class CircleAdapter extends BaseMultiItemQuickAdapter<CircleBean.DataBean
         addItemType(Constants.TYPE_VIDEO, R.layout.item_video);
         //网页
         addItemType(Constants.TYPE_WEB, R.layout.item_web);
-
-
         this.imageWatcher = imageWatcher;
         this.mRequestOptions = new RequestOptions().centerCrop();
         this.mDrawableTransitionOptions = DrawableTransitionOptions.withCrossFade();
@@ -107,6 +105,7 @@ public class CircleAdapter extends BaseMultiItemQuickAdapter<CircleBean.DataBean
                 if (item.getCreateon() != null && !item.getCreateon().equals("")) {
                     helper.setText(R.id.tv_time, item.getCreateon());
                 }
+                //多张图片显示
                 NineGridView layout = helper.getView(R.id.layout_nine);
                 layout.setSingleImageSize(80, 120);
                 if (item.getFiles() != null && item.getFiles().size() > 0) {
