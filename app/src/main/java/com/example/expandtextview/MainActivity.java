@@ -15,7 +15,6 @@ import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.EditText;
@@ -96,9 +95,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private String circle_id;
     private String userId;
     private String userName;
-    private Uri url;
-    private CustomerPopupWindow pw;
-    private View mView;
     private RxPermissions rxPermissions;
     private static MyHandler myHandler;
     private static String dstPath;
