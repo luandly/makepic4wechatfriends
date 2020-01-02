@@ -81,9 +81,13 @@ public class PlayVideoActivity extends AppCompatActivity {
     @Override
     public void onConfigurationChanged(@NonNull Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
+        //横竖屏切换
         refresh();
     }
 
+    /**
+     * 横竖屏切换刷新
+     */
     private void refresh() {
         boolean isBaseOnWidth = (getResources().getDisplayMetrics().widthPixels <= getResources().getDisplayMetrics().heightPixels);
         Window window  = getWindow();
