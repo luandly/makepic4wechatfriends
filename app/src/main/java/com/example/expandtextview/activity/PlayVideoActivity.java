@@ -4,12 +4,10 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
-import android.view.WindowManager;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.widget.AutoSizeableTextView;
 
 import com.dueeeke.videocontroller.StandardVideoController;
 import com.dueeeke.videoplayer.player.IjkPlayer;
@@ -17,14 +15,13 @@ import com.dueeeke.videoplayer.player.IjkVideoView;
 import com.dueeeke.videoplayer.player.PlayerConfig;
 import com.example.expandtextview.R;
 
-import me.jessyan.autosize.AutoSize;
 import me.jessyan.autosize.AutoSizeCompat;
 import tv.danmaku.ijk.media.player.IjkMediaPlayer;
 
 /**
  * @作者: njb
  * @时间: 2020/1/2 14:02
- * @描述:
+ * @描述: 视频播放
  */
 public class PlayVideoActivity extends AppCompatActivity {
     private String url;
@@ -41,11 +38,13 @@ public class PlayVideoActivity extends AppCompatActivity {
     }
 
     private void initViews() {
+        //播放view
         videoView = findViewById(R.id.video_view);
     }
 
     private void initData() {
         if(getIntent()!= null&& getIntent().getExtras()!= null){
+            //视频url
             url = getIntent().getExtras().getString("url");
         }
     }

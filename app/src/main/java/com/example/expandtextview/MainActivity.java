@@ -179,6 +179,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     //删除朋友圈
                     deleteCircleDialog();
                     break;
+                    //点击视频按钮跳转到视频播放界面
                 case R.id.video_view:
                     Intent intent = new Intent(this, PlayVideoActivity.class);
                     intent.putExtra("url", Objects.requireNonNull(circleAdapter.getItem(position)).getVideo());
@@ -188,20 +189,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     break;
             }
         });
-    }
-
-    private void setType(int itemType,int position) {
-        switch (itemType){
-            case 1:
-                break;
-            case 2:
-                break;
-            case 3:
-
-                break;
-            case 4:
-                break;
-        }
     }
 
     private void showLikePopupWindow(View view, int position) {
