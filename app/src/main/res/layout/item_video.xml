@@ -13,7 +13,7 @@
             android:id="@+id/iv_photo"
             android:layout_width="@dimen/public_40dp"
             android:layout_height="@dimen/public_40dp"
-            android:src="@drawable/ic_launcher_background"
+            android:src="@mipmap/timg"
             android:scaleType="fitXY" />
 
     <TextView

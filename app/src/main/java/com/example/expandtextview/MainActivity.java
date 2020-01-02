@@ -5,6 +5,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Rect;
 import android.net.Uri;
@@ -34,6 +35,7 @@ import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
+import com.example.expandtextview.activity.PlayVideoActivity;
 import com.example.expandtextview.adapter.CircleAdapter;
 import com.example.expandtextview.bean.CircleBean;
 import com.example.expandtextview.bean.CommentListBean;
@@ -177,10 +179,29 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     //删除朋友圈
                     deleteCircleDialog();
                     break;
+                case R.id.video_view:
+                    Intent intent = new Intent(this, PlayVideoActivity.class);
+                    intent.putExtra("url", Objects.requireNonNull(circleAdapter.getItem(position)).getVideo());
+                    startActivity(intent);
+                    break;
                 default:
                     break;
             }
         });
+    }
+
+    private void setType(int itemType,int position) {
+        switch (itemType){
+            case 1:
+                break;
+            case 2:
+                break;
+            case 3:
+
+                break;
+            case 4:
+                break;
+        }
     }
 
     private void showLikePopupWindow(View view, int position) {

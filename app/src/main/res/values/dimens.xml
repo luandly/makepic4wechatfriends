@@ -24,4 +24,5 @@
     <dimen name="dp_5">5dp</dimen>
     <dimen name="dp_20">20dp</dimen>
     <dimen name="dp_50">50dp</dimen>
+    <dimen name="public_50dp">50dp</dimen>
 </resources>
