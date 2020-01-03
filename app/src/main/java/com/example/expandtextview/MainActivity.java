@@ -245,7 +245,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         alert.setMessage("你确定要删除吗?");
         alert.setNegativeButton("取消", null);
         alert.setPositiveButton("确定", (dialog, which) -> {
-            //调接口删除
+            //调接口删除,这里写死
             dialog.dismiss();
         });
         alert.show();
@@ -260,7 +260,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             int statusBarH = Utils.getStatusBarHeight();//状态栏高度
             int screenH = llScroll.getRootView().getHeight();
             if (r.top != statusBarH) {
-                //在这个demo中r.top代表的是状态栏高度，在沉浸式状态栏时r.top＝0，通过getStatusBarHeight获取状态栏高度
+                //r.top代表的是状态栏高度，在沉浸式状态栏时r.top＝0，通过getStatusBarHeight获取状态栏高度
                 r.top = statusBarH;
             }
             int keyboardH = screenH - (r.bottom - r.top);
@@ -496,5 +496,4 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         }).submit();
     }
-
 }
