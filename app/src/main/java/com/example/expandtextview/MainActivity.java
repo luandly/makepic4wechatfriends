@@ -36,6 +36,7 @@ import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 import com.example.expandtextview.activity.PlayVideoActivity;
+import com.example.expandtextview.activity.WatchLiveActivity;
 import com.example.expandtextview.adapter.CircleAdapter;
 import com.example.expandtextview.bean.CircleBean;
 import com.example.expandtextview.bean.CommentListBean;
@@ -247,6 +248,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         alert.setPositiveButton("确定", (dialog, which) -> {
             //调接口删除,这里写死
             dialog.dismiss();
+            startActivity(new Intent(this, WatchLiveActivity.class));
         });
         alert.show();
     }

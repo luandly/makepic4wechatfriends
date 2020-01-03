@@ -34,6 +34,7 @@
         <activity android:name=".activity.AddCityActivity"/>
         <activity android:name=".activity.SpinnerActivity"/>
         <activity android:name=".activity.PlayVideoActivity"/>
+        <activity android:name=".activity.WatchLiveActivity"/>
     </application>
 
 </manifest>
