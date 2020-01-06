@@ -31,7 +31,7 @@ public class WatchLiveActivity extends AppCompatActivity {
     private void initView() {
         liveMemberCount = findViewById(R.id.liveMemberCount);
         liveClose = findViewById(R.id.liveClose);
-        //直播数量自适应手机大小
+        //自适应手机大小
         TextViewCompat.setAutoSizeTextTypeWithDefaults(liveMemberCount, TextViewCompat.AUTO_SIZE_TEXT_TYPE_UNIFORM);
         TextViewCompat.setAutoSizeTextTypeUniformWithConfiguration(liveMemberCount, 8, 10, 1, TypedValue.COMPLEX_UNIT_SP);
         liveMemberCount.setText("8888");
