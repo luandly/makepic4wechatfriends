@@ -18,4 +18,9 @@
         <item name="android:windowEnterAnimation">@anim/push_bottom_in</item>
         <item name="android:windowExitAnimation">@anim/push_bottom_out</item>
     </style>
+
+    <style name="video_menu_img">
+        <item name="android:layout_width">@dimen/size_30dp</item>
+        <item name="android:layout_height">@dimen/size_30dp</item>
+    </style>
 </resources>
