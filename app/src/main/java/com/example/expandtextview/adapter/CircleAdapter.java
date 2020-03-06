@@ -224,7 +224,8 @@ public class CircleAdapter extends BaseMultiItemQuickAdapter<CircleBean.DataBean
                             KeyboardUtil.hideSoftInput(etComment.getContext(), etComment);
                         }
                         if (click != null) {
-                            click.Commend(helper.getLayoutPosition() - 1, bean);
+                            //由于真实项目中有头部所以position-1
+                            click.Commend(helper.getLayoutPosition(), bean);
                         }
                     }
                 });
