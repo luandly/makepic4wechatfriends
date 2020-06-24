@@ -110,9 +110,9 @@
         android:id="@+id/ll_like"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:paddingLeft="@dimen/public_12dp"
+        android:paddingLeft="@dimen/public_6dp"
         android:paddingTop="@dimen/public_12dp"
-        android:paddingRight="@dimen/public_12dp"
+        android:paddingRight="@dimen/public_6dp"
         android:paddingBottom="@dimen/public_8dp"
         android:layout_marginLeft="@dimen/public_10dp"
         android:background="@mipmap/im_distribute_comm_bg"
@@ -127,8 +127,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="@dimen/text_size_14"
-            app:item_color="@color/praise_item"
-            android:lineSpacingMultiplier="1.1"/>
+            app:item_color="@color/praise_item" />
 
         <View
             android:id="@+id/view_like"

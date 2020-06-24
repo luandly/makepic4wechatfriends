@@ -195,7 +195,6 @@ public class CircleAdapter extends BaseMultiItemQuickAdapter<CircleBean.DataBean
             llLike.setVisibility(View.VISIBLE);
             if (item.getLike_list() != null && item.getLike_list().size() > 0) {
                 rvLike.setVisibility(View.VISIBLE);
-                LikeListAdapter likeListAdapter = new LikeListAdapter(item.getLike_list());
                 rvLike.setDatas(item.getLike_list());
             } else {
                 rvLike.setVisibility(View.GONE);

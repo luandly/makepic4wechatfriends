@@ -149,7 +149,6 @@
             android:id="@+id/rv_like"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:lineSpacingMultiplier="1.1"
             android:textSize="@dimen/text_size_14"
             app:item_color="@color/praise_item" />
 

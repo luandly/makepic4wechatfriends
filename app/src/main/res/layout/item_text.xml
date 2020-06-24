@@ -96,8 +96,8 @@
         android:layout_marginLeft="@dimen/dp_10"
         android:background="@mipmap/im_distribute_comm_bg"
         android:orientation="vertical"
-        android:paddingLeft="@dimen/public_12dp"
-        android:paddingTop="@dimen/public_12dp"
+        android:paddingLeft="@dimen/public_6dp"
+        android:paddingTop="@dimen/public_6dp"
         android:paddingRight="@dimen/public_12dp"
         android:paddingBottom="@dimen/public_8dp"
         android:visibility="gone"
@@ -109,7 +109,6 @@
             android:id="@+id/rv_like"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:lineSpacingMultiplier="1.1"
             android:textSize="@dimen/text_size_14"
             app:item_color="@color/praise_item" />
 

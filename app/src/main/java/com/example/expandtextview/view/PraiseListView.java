@@ -2,6 +2,7 @@ package com.example.expandtextview.view;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
 import android.text.Spannable;
 import android.text.SpannableString;
@@ -86,7 +87,7 @@ public class PraiseListView extends androidx.appcompat.widget.AppCompatTextView 
                 if (item != null) {
                     builder.append(setClickableSpan(item.getUser_name(), i));
                     if (i != datas.size() - 1) {
-                        builder.append(", ");
+                        builder.append(",");
                     }
                 }
             }
@@ -104,7 +105,7 @@ public class PraiseListView extends androidx.appcompat.widget.AppCompatTextView 
         Drawable drawable = getContext().getResources().getDrawable(R.drawable.heart_drawable_blue);
         drawable.setBounds(0, 0, drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight());
         ImageSpan imageSpan = new ImageSpan(drawable);
-        imgSpanText.setSpan(imageSpan,0, 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        imgSpanText.setSpan(imageSpan,0, 1, Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
         return imgSpanText;
     }
 
@@ -123,6 +124,10 @@ public class PraiseListView extends androidx.appcompat.widget.AppCompatTextView 
         return subjectSpanText;
     }
 
+    @Override
+    protected void onDraw(Canvas canvas) {
+        super.onDraw(canvas);
+    }
 
     public interface OnItemClickListener {
         void onClick(int position);
