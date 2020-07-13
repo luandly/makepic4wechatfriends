@@ -48,4 +48,9 @@
     <dimen name="size_25dp">25dp</dimen>
     <dimen name="size_2dp">2dp</dimen>
     <dimen name="size_18dp">18dp</dimen>
+    <dimen name="public_60dp">60dp</dimen>
+    <dimen name="public_200dp">200dp</dimen>
+    <dimen name="public_130dp">130dp</dimen>
+    <dimen name="public_30dp">30dp</dimen>
+    <dimen name="public_140dp">140dp</dimen>
 </resources>

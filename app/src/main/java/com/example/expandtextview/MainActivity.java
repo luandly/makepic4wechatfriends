@@ -17,6 +17,7 @@ import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.EditText;
@@ -28,6 +29,7 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -99,6 +101,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private RxPermissions rxPermissions;
     private static MyHandler myHandler;
     private static String dstPath;
+    private ImageView ivBg;
+    private ImageView ivUser;
+    private TextView tvName;
+    private ConstraintLayout clMessage;
+    private ImageView ivMessage;
+    private TextView tvMessage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -311,14 +319,34 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
      * 设置adapter
      */
     private void initAdapter() {
+        View headCircle = LayoutInflater.from(MainActivity.this).inflate(R.layout.item_circle_head, null);
+        initHead(headCircle);
         circleAdapter = new CircleAdapter(dataBeans, imageWatcher, llComment, etComment, this);
         layoutManger = new ScrollSpeedLinearLayoutManger(this);
         recyclerView.setLayoutManager(layoutManger);
         layoutManger.setSpeedSlow();
+        circleAdapter.addHeaderView(headCircle);
         recyclerView.addItemDecoration(new SpaceDecoration(this));
         recyclerView.setAdapter(circleAdapter);
     }
 
+    /**
+     * 初始化消息提醒布局
+     * @param headCircle
+     */
+    private void initHead(View headCircle) {
+        ivBg = headCircle.findViewById(R.id.iv_bg);
+        ivUser = headCircle.findViewById(R.id.iv_user);
+        tvName = headCircle.findViewById(R.id.tv_name);
+        clMessage = headCircle.findViewById(R.id.cl_message);
+        ivMessage = headCircle.findViewById(R.id.message_avatar);
+        tvMessage = headCircle.findViewById(R.id.message_detail);
+        ivBg.setOnClickListener(this);
+        ivUser.setOnClickListener(this);
+        //这里是调用接口数据，本例子写的假数据，可以自己根据需求来写
+        clMessage.setVisibility(View.VISIBLE);
+        tvMessage.setText("10条新信息");
+    }
 
     public void updateEditTextBodyVisible(int visibility) {
         llComment.setVisibility(visibility);
