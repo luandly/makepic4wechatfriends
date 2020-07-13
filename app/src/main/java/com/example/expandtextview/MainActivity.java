@@ -86,7 +86,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private int commentPosition;
     protected final String TAG = this.getClass().getSimpleName();
     CompositeDisposable compositeDisposable;
-    private TextView tvCity;
     private ScrollSpeedLinearLayoutManger layoutManger;
     private List<CircleBean.DataBean> dataBeans;
     ImageWatcher imageWatcher;
@@ -124,7 +123,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     @Override
                     public void onNext(WeatherEvent weatherEvent) {
                         Log.e("weather", weatherEvent.getTemperature() + "-**-" + weatherEvent.getCityName());
-                        tvCity.setText(String.format("%s %s", weatherEvent.getCityName(), weatherEvent.getTemperature()));
                     }
 
                     @Override
@@ -289,7 +287,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         etComment = findViewById(R.id.et_comment);
         tvSend = findViewById(R.id.tv_send_comment);
         llScroll = findViewById(R.id.ll_scroll);
-        tvCity = findViewById(R.id.tv_city);
         imageWatcher = findViewById(R.id.imageWatcher);
         //初始化仿微信图片滑动加载器
         imageWatcher.setTranslucentStatus(Utils.calcStatusBarHeight(this));

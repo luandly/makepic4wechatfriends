@@ -10,15 +10,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
-    <TextView
-        android:id="@+id/tv_city"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        tools:text="城市名称"
-        android:layout_gravity="center"
-        android:layout_margin="5dp"
-        android:gravity="center"
-        android:visibility="gone"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
