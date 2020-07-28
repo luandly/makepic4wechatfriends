@@ -42,6 +42,8 @@ import com.example.expandtextview.activity.WatchLiveActivity;
 import com.example.expandtextview.adapter.CircleAdapter;
 import com.example.expandtextview.bean.CircleBean;
 import com.example.expandtextview.bean.CommentListBean;
+import com.example.expandtextview.bean.LikeBean;
+import com.example.expandtextview.bean.LikeListBean;
 import com.example.expandtextview.bean.WeatherEvent;
 import com.example.expandtextview.util.AssetsUtil;
 import com.example.expandtextview.util.CommonUtils;
@@ -61,6 +63,7 @@ import com.tbruyelle.rxpermissions2.RxPermissions;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
 
@@ -107,6 +110,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private ConstraintLayout clMessage;
     private ImageView ivMessage;
     private TextView tvMessage;
+    private List<LikeListBean> likeBean;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -176,6 +180,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             userId = Objects.requireNonNull(circleAdapter.getItem(position)).getId();
             userName = Objects.requireNonNull(circleAdapter.getItem(position)).getUser_name();
             isLike = Objects.requireNonNull(circleAdapter.getItem(position)).getIs_like();
+            likeBean = new ArrayList<>(0);
+            likeBean  = circleAdapter.getData().get(position).getLike_list();
             comPosition = position;
             switch (view.getId()) {
                 case R.id.iv_edit:
@@ -208,6 +214,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public void onPraiseClick(int position) {
                 //调用点赞接口
+                getLikeData();
                 likePopupWindow.dismiss();
             }
 
@@ -243,6 +250,42 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         } else {
             likePopupWindow.showPopupWindow(view);
         }
+    }
+
+    /**
+     * 请求点赞接口，这里写的模拟数据
+     */
+    private void getLikeData() {
+        if (likeBean != null ) {
+            List<CircleBean.DataBean> list = circleAdapter.getData();
+            if (isLike == 1) {
+                Iterator it = list.get(comPosition).getLike_list().iterator();
+                List<LikeListBean> likeListBeans = new ArrayList<>();
+                while (it.hasNext()) {
+                    LikeListBean info = (LikeListBean) it.next();
+                    if (info.getUser_id().equals(String.valueOf(userId))) {
+                        it.remove();
+                    } else {
+                        likeListBeans.add(info);
+                    }
+                }
+                LikeListBean likeListBean = new LikeListBean();
+                likeListBean.setUser_id(userId+"");
+                likeListBean.setUser_name(userName);
+                list.get(comPosition).setIs_like(0);
+                list.get(comPosition).setLike_list(likeListBeans);
+                ToastUtils.ToastShort("取消点赞");
+            } else {
+                LikeListBean likeListBean = new LikeListBean();
+                likeListBean.setUser_id(userId + "");
+                likeListBean.setUser_name(userName);
+                list.get(comPosition).getLike_list().add(likeListBean);
+                list.get(comPosition).setIs_like(1);
+                ToastUtils.ToastShort("点赞成功");
+            }
+            circleAdapter.notifyDataSetChanged();
+        }
+
     }
 
 
